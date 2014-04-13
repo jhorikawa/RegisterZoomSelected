@@ -1,0 +1,15 @@
+Option Explicit
+'Script written by <Junichiro Horikawa>
+'Script copyrighted by <Junichiro Horikawa>
+'Script version Friday, August 31, 2012 12:17:00 PM
+
+Call Main()
+Sub Main()
+	Dim succeed
+	succeed = Rhino.DeleteDocumentData("ZoomSelectedObjects")
+	If Not IsNull(succeed) Then
+		Rhino.Print("all registered objects were deleted")
+	Else
+		Rhino.Print("nothing was deleted")
+	End If
+End Sub

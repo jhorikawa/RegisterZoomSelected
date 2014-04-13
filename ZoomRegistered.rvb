@@ -1,0 +1,38 @@
+Option Explicit
+'Script written by <Junichiro Horikawa>
+'Script copyrighted by <Junichiro Horikawa>
+'Script version Friday, August 31, 2012 12:07:08 PM
+
+Call Main()
+Sub Main()
+	Dim arrEntries, strEntry, strObj, arrObj
+	
+	arrEntries = Rhino.GetDocumentData("ZoomSelectedObjects")
+	
+	If Not IsArray(arrEntries) Then
+		Rhino.Print("there are no registered objects")
+		Exit Sub
+	End If
+	
+	strEntry = Rhino.GetString("select or write entry for zoom selected", arrEntries(0), arrEntries)
+	
+	If IsNull(strEntry) Then 
+		Rhino.Print("error: entry not selected")
+		Exit Sub
+	End If
+	
+	Rhino.EnableRedraw(False)
+	
+	strObj = Rhino.GetDocumentData("ZoomSelectedObjects", strEntry)
+	If IsNull(strObj) Then 
+		Rhino.Print("error: no registerd object")
+		Exit Sub
+	End If
+	
+	arrObj = Split(strObj, ",")
+	Rhino.SelectObjects arrObj
+	Rhino.ZoomSelected
+	Rhino.UnselectAllObjects
+	
+	Rhino.EnableRedraw(True)
+End Sub

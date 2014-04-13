@@ -1,0 +1,31 @@
+Option Explicit
+'Script written by <Junichiro Horikawa>
+'Script copyrighted by <Junichiro Horikawa>
+'Script version Friday, August 31, 2012 11:51:49 AM
+
+Call Main()
+Sub Main()
+	Dim arrObj, strEntry, strValue, strObj
+	
+	arrObj = Rhino.GetObjects("select object for registering -zoom selected object-",,,True)
+	If IsNull(arrObj) Then
+		Rhino.Print("error: object not selected")
+		Exit Sub
+	End If
+	strEntry = Rhino.GetString("select or write entery name",, Array("z1", "z2", "z3", "z4", "z5", "z6", "z7", "z8", "z9"))
+	If IsNull(strEntry) Then
+		Rhino.Print("error: entry not defined")
+		Exit Sub
+	End If
+	
+	strValue = ""
+	For Each strObj In arrObj
+		strValue = strValue + strObj + ","
+	Next
+	
+	strValue = Mid(strValue, 1, Len(strValue) - 1)
+	
+	Rhino.SetDocumentData "ZoomSelectedObjects", strEntry, strValue 
+	Rhino.Print("object registered for zoom selected")
+	
+End Sub

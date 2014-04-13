@@ -1,0 +1,43 @@
+Option Explicit
+'Script written by <Junichiro Horikawa>
+'Script copyrighted by <Junichiro Horikawa>
+'Script version Friday, August 31, 2012 12:22:37 PM
+
+Call Main()
+Sub Main()
+	Dim arrEntries, arrDelete, strObj, strEntry, arrBool(), i, boolDelete, boolSucceed
+
+	arrEntries = Rhino.GetDocumentData("ZoomSelectedObjects")
+	
+	If Not IsArray(arrEntries) Then
+		Rhino.Print("there are no registered objects")
+		Exit Sub
+	End If
+	
+	i = 0
+	For Each strEntry In arrEntries
+		ReDim Preserve arrBool(i)
+		arrBool(i) = False
+		i = i + 1
+	Next
+	arrDelete = Rhino.CheckListBox(arrEntries, arrBool, "check registered entry you want to delete", "Registered")
+	
+	If Not IsArray(arrDelete) Then
+		Rhino.Print("error: nothing checked")
+		Exit Sub
+	End If
+	
+	i = 0
+	For Each boolDelete In arrDelete
+		If boolDelete = True Then
+			boolSucceed = Rhino.DeleteDocumentData("ZoomSelectedObjects", arrEntries(i))
+		End If
+		i = i + 1
+	Next
+	
+	If IsNull(boolSucceed) Then
+		Rhino.Print("error: deletion failed")
+	End If
+	
+	
+End Sub
